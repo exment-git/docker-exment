@@ -1,0 +1,14 @@
+version: '3'
+services:
+ phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    env_file: .env
+    ports:
+      - ${EXMENT_DOCKER_PHPMYADMIN_PORT-8888}:80
+    networks:
+      - exment-network
+    environment:
+      - PMA_ARBITRARY=1
+      
+networks:
+  exment-network:

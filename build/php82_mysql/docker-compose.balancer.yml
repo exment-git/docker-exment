@@ -1,0 +1,16 @@
+version: '3'
+services:
+  balancer:
+    image: jwilder/nginx-proxy
+    env_file: .env
+    privileged: true
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    ports:
+      - ${EXMENT_DOCKER_BALANCER_HTTP_PORT-8080}:80
+      - ${EXMENT_DOCKER_BALANCER_HTTPS_PORT-8081}:443
+    networks:
+      - exment-network
+
+networks:
+  exment-network:

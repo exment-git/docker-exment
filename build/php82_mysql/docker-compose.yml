@@ -1,0 +1,39 @@
+version: '3'
+services:
+  web:
+    image: nginx:latest
+    ports:
+      - ${EXMENT_DOCKER_HTTP_PORTS-80}:80
+    volumes:
+      - ./web/volumes/nginx.conf:/etc/nginx/conf.d/default.conf
+      - www-data:/var/www/exment
+    env_file: .env
+    depends_on:
+      - php
+    networks:
+      - exment-network
+    environment:
+      - VIRTUAL_HOST=${EXMENT_DOCKER_FRONT_DOMAIN-localhost}
+
+  php:
+    build: 
+      context: ./php
+      args:
+        - LARAVEL_VERSION=${EXMENT_DOCKER_LARAVEL_VERSION-5.6.*}
+        - EXMENT_VERSION=${EXMENT_DOCKER_EXMENT_VERSION-*}
+
+    volumes:
+      - www-data:/var/www/exment
+      - ./php/volumes/php.ini:/usr/local/etc/php/php.ini
+      - ./php/volumes/logs:/var/www/exment/storage/logs
+      - ./php/volumes/.env:/var/www/exment/.env
+      - ./php/volumes/AppServiceProvider.php:/var/www/exment/app/Providers/AppServiceProvider.php
+    env_file: .env
+    networks:
+      - exment-network
+
+volumes:
+  www-data:
+  
+networks:
+  exment-network:

@@ -1,0 +1,22 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:8.0
+    ports:
+      - ${EXMENT_DOCKER_MYSQL_PORT-3306}:3306
+    volumes:
+      - mysql-data:/var/lib/mysql
+    env_file: .env
+    environment:
+      MYSQL_DATABASE: ${EXMENT_DOCKER_MYSQL_DATABASE-exment_database}
+      MYSQL_ROOT_PASSWORD: ${EXMENT_DOCKER_MYSQL_ROOT_PASSWORD-secret}
+      MYSQL_USER: ${EXMENT_DOCKER_MYSQL_USER-exment_user}
+      MYSQL_PASSWORD: ${EXMENT_DOCKER_MYSQL_PASSWORD-secret}
+    networks:
+      - exment-network
+
+volumes:
+  mysql-data:
+  
+networks:
+  exment-network:

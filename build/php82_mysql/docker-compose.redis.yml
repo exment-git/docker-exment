@@ -1,0 +1,17 @@
+version: '3'
+services:
+  redis:
+    image: "redis:latest"
+    ports:
+      - ${EXMENT_DOCKER_REDIS_PORT-6379}:6379
+    volumes:
+      - redis-data:/data
+    networks:
+      - exment-network
+    env_file: .env
+    
+volumes:
+  redis-data:
+  
+networks:
+  exment-network:
