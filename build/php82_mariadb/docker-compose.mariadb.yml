@@ -1,0 +1,22 @@
+version: '3'
+services:
+  mariadb:
+    image: mariadb:10.4
+    ports:
+      - ${EXMENT_DOCKER_MYSQL_PORT-3306}:3306
+    volumes:
+      - mariadb-data:/var/lib/mysql
+    env_file: .env
+    environment:
+      MYSQL_DATABASE: ${EXMENT_DOCKER_MYSQL_DATABASE-exment_database}
+      MYSQL_ROOT_PASSWORD: ${EXMENT_DOCKER_MYSQL_ROOT_PASSWORD-secret}
+      MYSQL_USER: ${EXMENT_DOCKER_MYSQL_USER-exment_user}
+      MYSQL_PASSWORD: ${EXMENT_DOCKER_MYSQL_PASSWORD-secret}  
+    networks:
+      - exment-network 
+
+volumes:
+  mariadb-data:
+ 
+networks:
+  exment-network:

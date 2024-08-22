@@ -1,0 +1,21 @@
+version: '3'
+services:
+  https-portal:
+    image: steveltn/https-portal:1
+    ports:
+      - ${EXMENT_DOCKER_HTTPS_PORTS-443}:443
+    restart: always
+    depends_on:
+      - web
+    volumes:
+      - ./https-portal/volumes/default.ssl.conf.erb:/var/lib/nginx-conf/${EXMENT_DOCKER_FRONT_DOMAIN-localhost}.conf.erb:ro
+    environment:
+      STAGE: ${EXMENT_DOCKER_HTTPS_STAGE-staging}
+      DOMAINS: '${EXMENT_DOCKER_FRONT_DOMAIN-localhost} -> ${EXMENT_DOCKER_HTTPS_TARGET_URL-http://web:80}'
+      X_FORWARDED_PORT: ${EXMENT_DOCKER_HTTPS_PORTS-443}
+      X_FORWARDED_HOST: ${EXMENT_DOCKER_FRONT_DOMAIN-localhost}
+    networks:
+      - exment-network
+
+networks:
+  exment-network:
